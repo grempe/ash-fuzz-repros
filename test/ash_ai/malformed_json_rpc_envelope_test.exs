@@ -53,15 +53,15 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
   end
 
   test "control: the 2026-07-28 path rejects a batch and a non-object _meta cleanly" do
-    assert {400, %{"error" => %{"code" => -32600}}} = mcp([], @new_headers)
+    assert {400, %{"error" => %{"code" => -32_600}}} = mcp([], @new_headers)
 
-    assert {400, %{"error" => %{"code" => -32600}}} =
+    assert {400, %{"error" => %{"code" => -32_600}}} =
              mcp([request("tools/list", %{"_meta" => @meta})], @new_headers)
 
-    assert {400, %{"error" => %{"code" => -32602}}} =
+    assert {400, %{"error" => %{"code" => -32_602}}} =
              mcp(request("tools/list", %{"_meta" => "x"}), @new_headers)
 
-    assert {400, %{"error" => %{"code" => -32602}}} =
+    assert {400, %{"error" => %{"code" => -32_602}}} =
              mcp(request("tools/list", %{"_meta" => []}), @new_headers)
   end
 
@@ -71,15 +71,15 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
 
   @tag bug: @bug, signature: @batch
   test "initialize-based path: an empty batch is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "error" => %{"code" => -32600}}} = mcp([])
+    assert {_, %{"jsonrpc" => "2.0", "error" => %{"code" => -32_600}}} = mcp([])
   end
 
   @tag bug: @bug, signature: @batch
-  test "initialize-based path: a one-element batch is answered or rejected with -32600" do
+  test "initialize-based path: a one-element batch is answered or rejected with -32_600" do
     assert {_, response} = mcp([request("tools/list", %{})])
 
     assert match?([%{"jsonrpc" => "2.0", "id" => 1, "result" => _}], response) or
-             match?(%{"jsonrpc" => "2.0", "error" => %{"code" => -32600}}, response)
+             match?(%{"jsonrpc" => "2.0", "error" => %{"code" => -32_600}}, response)
   end
 
   @tag bug: @bug, signature: @string_access
@@ -87,7 +87,7 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
     assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => code}}} =
              mcp(request("tools/call", "x"))
 
-    assert code in [-32600, -32602]
+    assert code in [-32_600, -32_602]
   end
 
   @tag bug: @bug, signature: @list_access
@@ -95,24 +95,24 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
     assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => code}}} =
              mcp(request("tools/call", []))
 
-    assert code in [-32600, -32602]
+    assert code in [-32_600, -32_602]
   end
 
   @tag bug: @bug, signature: @string_access
   test "initialize-based path: params.arguments as a string is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32602}}} =
+    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32_602}}} =
              mcp(request("tools/call", %{"name" => "read_posts", "arguments" => "x"}))
   end
 
   @tag bug: @bug, signature: @list_access
   test "initialize-based path: params.arguments as a list is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32602}}} =
+    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32_602}}} =
              mcp(request("tools/call", %{"name" => "read_posts", "arguments" => []}))
   end
 
   @tag bug: @bug, signature: @string_access
   test "initialize-based path: initialize with params.capabilities as a string is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32602}}} =
+    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32_602}}} =
              mcp(
                request("initialize", %{
                  "protocolVersion" => "2025-06-18",
@@ -127,7 +127,7 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
     assert {400, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => code}}} =
              mcp(request("tools/call", "x"), @new_headers)
 
-    assert code in [-32600, -32602]
+    assert code in [-32_600, -32_602]
   end
 
   @tag bug: @bug, signature: @list_access
@@ -135,12 +135,12 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
     assert {400, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => code}}} =
              mcp(request("tools/call", []), @new_headers)
 
-    assert code in [-32600, -32602]
+    assert code in [-32_600, -32_602]
   end
 
   @tag bug: @bug, signature: @string_access
   test "2026-07-28 path: params.arguments as a string is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32602}}} =
+    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32_602}}} =
              mcp(
                request("tools/call", %{
                  "name" => "read_posts",
@@ -153,7 +153,7 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
 
   @tag bug: @bug, signature: @list_access
   test "2026-07-28 path: params.arguments as a list is a JSON-RPC error" do
-    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32602}}} =
+    assert {_, %{"jsonrpc" => "2.0", "id" => 1, "error" => %{"code" => -32_602}}} =
              mcp(
                request("tools/call", %{
                  "name" => "read_posts",

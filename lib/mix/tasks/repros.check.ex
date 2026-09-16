@@ -15,6 +15,11 @@ defmodule Mix.Tasks.Repros.Check do
   """
   use Mix.Task
 
+  # The task ends in System.halt/1 on purpose: `mix test` registers an exit
+  # handler that reports the intentionally failing bug tests as a failure, and
+  # halting is the only way to replace that status with this check's own.
+  @dialyzer {:no_return, run: 1}
+
   @impl true
   def run(args) do
     {opts, _rest} = OptionParser.parse!(args, strict: [seed: :integer])
@@ -57,21 +62,19 @@ defmodule Mix.Tasks.Repros.Check do
 
     problems =
       Enum.flat_map(tests, fn test ->
-        cond do
-          test.state != :failed ->
-            ["#{describe(test)}: expected a failure, got #{test.state}"]
-
-          true ->
-            test.signature
-            |> Enum.reject(&String.contains?(test.output, &1))
-            |> Enum.map(&"#{describe(test)}: failure output lacks #{inspect(&1)}")
+        if test.state == :failed do
+          test.signature
+          |> Enum.reject(&String.contains?(test.output, &1))
+          |> Enum.map(&"#{describe(test)}: failure output lacks #{inspect(&1)}")
+        else
+          ["#{describe(test)}: expected a failure, got #{test.state}"]
         end
       end)
 
     %{
       bug: bug,
       repo: repo,
-      signature: signatures |> Enum.map(&Enum.join(&1, " + ")) |> Enum.join(" | "),
+      signature: Enum.map_join(signatures, " | ", &Enum.join(&1, " + ")),
       tests: length(tests),
       problems: problems,
       result: if(problems == [], do: "reproduced (#{length(tests)} tests)", else: "PROBLEM")

@@ -17,7 +17,7 @@ defmodule Repro.AshAi.ScalarBodyEchoesInspectedMapTest do
 
   @tag bug: @bug, signature: @signature
   test "initialize-based path: the body 5 gets a message without inspected terms" do
-    assert {_, %{"jsonrpc" => "2.0", "error" => %{"code" => -32600, "message" => message}}} =
+    assert {_, %{"jsonrpc" => "2.0", "error" => %{"code" => -32_600, "message" => message}}} =
              mcp(5)
 
     refute message =~ "%{"
@@ -25,7 +25,7 @@ defmodule Repro.AshAi.ScalarBodyEchoesInspectedMapTest do
 
   @tag bug: @bug, signature: @signature
   test "2026-07-28 path: the body 5 gets a message without inspected terms" do
-    assert {400, %{"jsonrpc" => "2.0", "error" => %{"code" => -32600, "message" => message}}} =
+    assert {400, %{"jsonrpc" => "2.0", "error" => %{"code" => -32_600, "message" => message}}} =
              mcp(5, [{"mcp-protocol-version", "2026-07-28"}])
 
     refute message =~ "%{"

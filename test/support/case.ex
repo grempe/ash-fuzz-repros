@@ -5,6 +5,8 @@ defmodule Repro.Case do
   """
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       import Plug.Conn
@@ -17,8 +19,8 @@ defmodule Repro.Case do
   end
 
   setup do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repro.Repo)
-    Ecto.Adapters.SQL.Sandbox.mode(Repro.Repo, {:shared, self()})
+    :ok = Sandbox.checkout(Repro.Repo)
+    Sandbox.mode(Repro.Repo, {:shared, self()})
     :ok
   end
 

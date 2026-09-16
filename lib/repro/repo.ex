@@ -4,4 +4,7 @@ defmodule Repro.Repo do
   def installed_extensions, do: ["ash-functions"]
 
   def min_pg_version, do: %Version{major: 16, minor: 0, patch: 0}
+
+  # No multitenancy in this project.
+  def all_tenants, do: []
 end
