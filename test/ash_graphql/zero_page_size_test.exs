@@ -5,8 +5,13 @@ defmodule Repro.AshGraphql.ZeroPageSizeTest do
   `Spark.Options.ValidationError` is wrapped as `Ash.Error.Unknown`, which has
   no GraphQL rendering, so the client gets "Something went wrong". A
   relationship field's `limit: 0` legitimately returns an empty list.
+
+  Fixed in ash_graphql 1.12.0 (ash-project/ash_graphql#476). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_graphql 1.12.0"
 
   @bug "ash_graphql/zero-page-size-unrendered"
   @signature ["Spark.Options.ValidationError", "expected positive integer, got: 0"]

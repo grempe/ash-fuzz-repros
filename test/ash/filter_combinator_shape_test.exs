@@ -6,8 +6,13 @@ defmodule Repro.Ash.FilterCombinatorShapeTest do
   A string, nil, an integer or an empty list matches neither clause; an empty
   map matches the map clause, reduces to `[]`, and then matches neither. By
   contrast `%{"not" => "x"}` puts an `InvalidFilterValue` on the query.
+
+  Fixed in ash 3.33.6 (ash-project/ash#2951). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash 3.33.6"
 
   @bug "ash/filter-combinator-shape"
   @signature ["FunctionClauseError", "Ash.Filter.parse_and_join/3"]

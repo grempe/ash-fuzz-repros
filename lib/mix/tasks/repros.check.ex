@@ -1,10 +1,13 @@
 defmodule Mix.Tasks.Repros.Check do
-  @shortdoc "Runs the suite and checks that every bug reproduces with its documented signature"
+  @shortdoc "Runs the suite and checks that open bugs reproduce and fixed bugs pass"
   @moduledoc """
   Runs the test suite with a formatter that records every result, then verifies:
 
     * every test tagged `bug:` failed, and its failure output (including
       captured logs) contains every string in its `signature:` tag;
+    * every test tagged `bug:` and `fixed_in:` passed, because the pinned
+      release contains the upstream fix (the signature is kept as a record of
+      how it used to fail);
     * every other test (the controls) passed;
     * nothing was skipped, excluded or invalid.
 
@@ -48,7 +51,10 @@ defmodule Mix.Tasks.Repros.Check do
     )
 
     if problems == [] do
-      Mix.shell().info("All bugs reproduced with their documented signatures.")
+      Mix.shell().info(
+        "All open bugs reproduced with their documented signatures; all fixed bugs pass."
+      )
+
       System.halt(0)
     else
       Mix.shell().error("#{length(problems)} problem(s) found.")
@@ -60,16 +66,7 @@ defmodule Mix.Tasks.Repros.Check do
     [repo | _] = String.split(bug, "/", parts: 2)
     signatures = tests |> Enum.map(& &1.signature) |> Enum.uniq()
 
-    problems =
-      Enum.flat_map(tests, fn test ->
-        if test.state == :failed do
-          test.signature
-          |> Enum.reject(&String.contains?(test.output, &1))
-          |> Enum.map(&"#{describe(test)}: failure output lacks #{inspect(&1)}")
-        else
-          ["#{describe(test)}: expected a failure, got #{test.state}"]
-        end
-      end)
+    problems = Enum.flat_map(tests, &test_problems/1)
 
     %{
       bug: bug,
@@ -77,8 +74,33 @@ defmodule Mix.Tasks.Repros.Check do
       signature: Enum.map_join(signatures, " | ", &Enum.join(&1, " + ")),
       tests: length(tests),
       problems: problems,
-      result: if(problems == [], do: "reproduced (#{length(tests)} tests)", else: "PROBLEM")
+      result: if(problems == [], do: result(tests), else: "PROBLEM")
     }
+  end
+
+  defp test_problems(%{fixed_in: nil, state: :failed} = test) do
+    test.signature
+    |> Enum.reject(&String.contains?(test.output, &1))
+    |> Enum.map(&"#{describe(test)}: failure output lacks #{inspect(&1)}")
+  end
+
+  defp test_problems(%{fixed_in: nil} = test),
+    do: ["#{describe(test)}: expected a failure, got #{test.state}"]
+
+  defp test_problems(%{state: :passed}), do: []
+
+  defp test_problems(test),
+    do: ["#{describe(test)}: fixed in #{test.fixed_in}, expected a pass, got #{test.state}"]
+
+  defp result(tests) do
+    {fixed, open} = Enum.split_with(tests, & &1.fixed_in)
+    releases = fixed |> Enum.map(& &1.fixed_in) |> Enum.uniq() |> Enum.sort() |> Enum.join(", ")
+
+    case {fixed, open} do
+      {[], _} -> "reproduced (#{length(open)} tests)"
+      {_, []} -> "fixed in #{releases} (#{length(fixed)} tests pass)"
+      _ -> "reproduced (#{length(open)} tests), fixed in #{releases} (#{length(fixed)} tests)"
+    end
   end
 
   defp describe(test), do: "#{test.file}: #{test.name}"

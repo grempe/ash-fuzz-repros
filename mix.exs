@@ -29,13 +29,13 @@ defmodule Repro.MixProject do
   # verified against. See README.md for the versions the bugs were found on.
   defp deps do
     [
-      {:ash, "== 3.33.3"},
+      {:ash, "== 3.33.9"},
       {:ash_postgres, "== 2.13.1"},
-      {:ash_sql, "== 0.7.5"},
+      {:ash_sql, "== 0.7.6"},
       {:ash_json_api, "== 1.7.1"},
-      {:ash_graphql, "== 1.11.0"},
+      {:ash_graphql, "== 1.12.0"},
       {:ash_lua, "== 0.2.2"},
-      {:ash_ai, "== 1.0.3"},
+      {:ash_ai, "== 1.1.0"},
       {:absinthe, "== 1.12.0"},
       {:absinthe_plug, "== 1.5.10"},
       {:ecto, "== 3.14.2"},

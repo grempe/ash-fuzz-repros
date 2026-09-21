@@ -8,8 +8,13 @@ defmodule Repro.AshGraphql.NegativePageSizeComplexityTest do
   does not change that. With analysis off, `first: -1` is an unrendered
   `Spark.Options.ValidationError` (see the zero page size test), while a
   relationship field's `limit: -1` returns an empty list.
+
+  Fixed in ash_graphql 1.12.0 (ash-project/ash_graphql#476). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_graphql 1.12.0"
 
   @bug "ash_graphql/negative-page-size-complexity"
   @signature ["Absinthe.AnalysisError", "The complexity value must be a non negative integer"]

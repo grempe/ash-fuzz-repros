@@ -4,8 +4,13 @@ defmodule Repro.AshAi.ScalarBodyEchoesInspectedMapTest do
   `Plug.Parsers` as `%{"_json" => 5}`, and the server answers "Invalid Request
   Got: %{\\"_json\\" => 5}", an inspected Elixir term in a client-facing message.
   The same happens on both protocol paths.
+
+  Fixed in ash_ai 1.1.0 (ash-project/ash_ai#234). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_ai 1.1.0"
 
   @bug "ash_ai/scalar-body-echoes-inspected-map"
   @signature ["Invalid Request Got: %{", "_json"]

@@ -35,6 +35,7 @@ defmodule Repro.CheckFormatter do
       file: Path.relative_to_cwd(test.tags[:file]),
       bug: test.tags[:bug],
       signature: List.wrap(test.tags[:signature]),
+      fixed_in: test.tags[:fixed_in],
       state: state(test.state),
       output: failure_text(test) <> (test.logs || "")
     }

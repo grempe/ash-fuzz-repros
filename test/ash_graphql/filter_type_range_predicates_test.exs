@@ -5,8 +5,13 @@ defmodule Repro.AshGraphql.FilterTypeRangePredicatesTest do
   schema lists every predicate whose argument types allow `:any`. Evidence for
   the Ash report `ash/predicate-argument-types-unchecked`; ash_graphql renders
   Ash's declarations faithfully, so no separate report is filed.
+
+  Fixed in ash 3.33.6 (ash-project/ash#2948). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash 3.33.6"
 
   @bug "ash/predicate-argument-types-unchecked"
   @signature ["rangeOverlaps"]

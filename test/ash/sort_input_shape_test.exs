@@ -7,8 +7,13 @@ defmodule Repro.Ash.SortInputShapeTest do
   an `InvalidFilterValue` on the query for an unexpected shape; sort input
   should fail the same way. Found while reproducing the ash_lua `sort = 5`
   case; it is new relative to the original fuzzing report.
+
+  Fixed in ash 3.33.5 (ash-project/ash#2947). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash 3.33.5"
 
   @bug "ash/sort-input-shape"
 

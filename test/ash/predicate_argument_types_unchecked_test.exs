@@ -9,8 +9,13 @@ defmodule Repro.Ash.PredicateArgumentTypesUncheckedTest do
   argument types as `[:any, :same]` (`[:any, :any]` for contains), which is
   why AshGraphql's filter input types list them on every field; that
   introspection test is tagged with this bug as evidence.
+
+  Fixed in ash 3.33.6 (ash-project/ash#2948). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash 3.33.6"
 
   @bug "ash/predicate-argument-types-unchecked"
   @signature ["Postgrex.Error", "operator does not exist:"]
@@ -51,9 +56,12 @@ defmodule Repro.Ash.PredicateArgumentTypesUncheckedTest do
 
   @tag bug: @bug, signature: @signature
   test "GraphQL listPosts(filter: {title: {rangeOverlaps: \"x\"}}) returns a rendered error" do
-    assert {200, %{"errors" => [%{"code" => code}]}} =
+    assert {200, %{"errors" => [error]}} =
              graphql(~S|{ listPosts(filter: {title: {rangeOverlaps: "x"}}) { results { id } } }|)
 
-    assert code != "something_went_wrong"
+    # Either a rendered Ash error or, once the filter type stops listing the
+    # predicate, Absinthe's own validation error (which has no code)
+    assert error["code"] != "something_went_wrong"
+    refute error["message"] =~ "Something went wrong"
   end
 end
