@@ -12,7 +12,7 @@ Status as of 2026-09-21.
 | ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | open |
 | ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | open |
 | ash_postgres/uncastable-filter-value-conversion | https://github.com/ash-project/ash_postgres/issues/855 | open |
-| ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | open |
+| ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | open, fix proposed |
 | ash_graphql/negative-page-size-complexity | https://github.com/ash-project/ash_graphql/issues/471 | fixed in ash_graphql 1.12.0 |
 | ash_graphql/null-boolean-filter-crash | https://github.com/ash-project/ash_graphql/issues/472 | fixed in ash_graphql 1.12.0 |
 | ash_graphql/unrendered-invalid-filter-value | https://github.com/ash-project/ash_graphql/issues/473 | open |

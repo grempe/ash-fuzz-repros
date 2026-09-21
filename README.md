@@ -92,7 +92,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | open | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
-| ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | open | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
+| ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | open, fix proposed | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
 | ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | open | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
@@ -531,7 +531,9 @@ changeset context.
 ### ash_json_api/list-valued-query-params-crash
 
 Status (2026-09-21): open; reproduces on ash_json_api 1.7.1, which is still the
-newest release.
+newest release. A fix is proposed in
+[ash_json_api#457](https://github.com/ash-project/ash_json_api/pull/457); all
+four bug tests pass against its head `f259faa`.
 
 Trigger: `GET /posts?include[]=comments`, `GET /posts?fields[post][]=title`,
 `GET /posts?page[]=1` and `GET /posts?page[limit][]=1`. The query string
