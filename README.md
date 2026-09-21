@@ -102,7 +102,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_lua/host-exception-leaks-to-script | ash-project/ash_lua | a host exception before dispatch reaches the script verbatim | test/ash_lua/host_exception_leaks_to_script_test.exs | fixed on main, unreleased | [#16](https://github.com/ash-project/ash_lua/issues/16) |
 | ash_lua/action-input-merged-under-query-controls | ash-project/ash_lua | action `input` is merged under the query controls | test/ash_lua/action_input_merged_under_controls_test.exs | fixed on main, unreleased | [#15](https://github.com/ash-project/ash_lua/issues/15) |
 | ash_lua/unrendered-query-errors | ash-project/ash_lua | three Ash query errors render as `unknown_error` | test/ash_lua/unrendered_query_errors_test.exs | fixed on main, unreleased | [#18](https://github.com/ash-project/ash_lua/issues/18) |
-| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | open | [#229](https://github.com/ash-project/ash_ai/issues/229) |
+| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | open, fix proposed | [#229](https://github.com/ash-project/ash_ai/issues/229) |
 | ash_ai/scalar-body-echoes-inspected-map | ash-project/ash_ai | a malformed body is echoed as an inspected Elixir term | test/ash_ai/scalar_body_echoes_inspected_map_test.exs | fixed in ash_ai 1.1.0 | [#230](https://github.com/ash-project/ash_ai/issues/230) |
 | ecto/inspect-query-crashes-on-spark-regex-type-param | elixir-ecto/ecto | inspecting a query that holds an MFA-shaped tuple raises, so `Ecto.Query.CastError` cannot be raised | test/ecto/inspect_query_with_spark_regex_type_param_test.exs | closed as fixed in Elixir, unreleased | [#4793](https://github.com/elixir-ecto/ecto/issues/4793) |
 | elixir/macro-to-string-mfa-tuple | elixir-lang/elixir | `Macro.to_string/1` crashes instead of inspecting an MFA-shaped tuple | test/elixir/macro_to_string_mfa_tuple_test.exs | fixed on main, unreleased | [#15903](https://github.com/elixir-lang/elixir/issues/15903) |
@@ -959,7 +959,9 @@ version with no header selects it as well and then answers `-32020`).
 
 ### ash_ai/malformed-json-rpc-envelope
 
-Status (2026-09-21): open; reproduces on ash_ai 1.1.0.
+Status (2026-09-21): open; reproduces on ash_ai 1.1.0. A fix is proposed in
+[ash_ai#238](https://github.com/ash-project/ash_ai/pull/238); all eleven bug
+tests pass against its head `7e6fcc5`.
 
 | Shape | initialize-based path | 2026-07-28 path |
 |---|---|---|
