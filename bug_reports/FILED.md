@@ -15,7 +15,7 @@ Status as of 2026-09-22.
 | ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | fixed on main, unreleased |
 | ash_graphql/negative-page-size-complexity | https://github.com/ash-project/ash_graphql/issues/471 | fixed in ash_graphql 1.12.0 |
 | ash_graphql/null-boolean-filter-crash | https://github.com/ash-project/ash_graphql/issues/472 | fixed in ash_graphql 1.12.0 |
-| ash_graphql/unrendered-invalid-filter-value | https://github.com/ash-project/ash_graphql/issues/473 | open |
+| ash_graphql/unrendered-invalid-filter-value | https://github.com/ash-project/ash_graphql/issues/473 | open, fix proposed |
 | ash_graphql/zero-page-size-unrendered | https://github.com/ash-project/ash_graphql/issues/474 | fixed in ash_graphql 1.12.0 |
 | ash_lua/action-input-merged-under-query-controls | https://github.com/ash-project/ash_lua/issues/15 | fixed on main, unreleased |
 | ash_lua/host-exception-leaks-to-script | https://github.com/ash-project/ash_lua/issues/16 | fixed on main, unreleased |

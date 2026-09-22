@@ -95,7 +95,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
-| ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | open | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
+| ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | open, fix proposed | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
 | ash_graphql/zero-page-size-unrendered | ash-project/ash_graphql | `first: 0` / `last: 0` is an unrendered error | test/ash_graphql/zero_page_size_test.exs | fixed in ash_graphql 1.12.0 | [#474](https://github.com/ash-project/ash_graphql/issues/474) |
 | absinthe/lone-surrogate-escape-leaks-argument-error | absinthe-graphql/absinthe | `"\ud800"` and a surrogate pair escape leak Erlang's `ArgumentError` text | test/absinthe/lone_surrogate_escape_test.exs | open, fix proposed | [#1458](https://github.com/absinthe-graphql/absinthe/issues/1458) |
 | ash_lua/returned-error-table-converted-only-at-top-level | ash-project/ash_lua | a returned error table keeps nested Lua tuples | test/ash_lua/nested_error_table_test.exs | fixed on main, unreleased | [#17](https://github.com/ash-project/ash_lua/issues/17) |
@@ -665,7 +665,9 @@ turns the 500 into the unrendered error above.
 
 ### ash_graphql/unrendered-invalid-filter-value
 
-Status (2026-09-21): open; reproduces on ash_graphql 1.12.0.
+Status (2026-09-22): open; reproduces on ash_graphql 1.12.0. A fix is proposed
+in [ash_graphql#477](https://github.com/ash-project/ash_graphql/pull/477); both
+bug tests pass against its head `186d321`.
 
 Trigger: `getPost(id: "not-a-uuid")` or
 `listPosts(filter: {id: {eq: "not-a-uuid"}})`.
