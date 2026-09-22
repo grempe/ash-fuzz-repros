@@ -89,7 +89,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash/predicate-argument-types-unchecked | ash-project/ash | input filters do not check a predicate's argument types against the field, so range predicates on text (and `contains` on an integer) reach Postgres | test/ash/predicate_argument_types_unchecked_test.exs, plus a GraphQL introspection test | fixed in ash 3.33.6 | [#2939](https://github.com/ash-project/ash/issues/2939) |
 | ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | open | [#2940](https://github.com/ash-project/ash/issues/2940) |
 | ash/sort-input-shape | ash-project/ash | `sort_input` with a non-list, non-string value raises (new) | test/ash/sort_input_shape_test.exs | fixed in ash 3.33.5 | [#2941](https://github.com/ash-project/ash/issues/2941) |
-| ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | open | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
+| ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | open, fix proposed | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open, fix proposed | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
@@ -338,8 +338,8 @@ validation in the list clause.
 
 Status (2026-09-22): open; reproduces on ash_postgres 2.13.1, which is still the
 newest release. A fix is proposed in
-[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863); all
-five bug tests pass against its head `2302489`.
+[ash_postgres#864](https://github.com/ash-project/ash_postgres/pull/864); all
+thirteen bug tests pass against its head `d9d5bba`.
 
 Ash does not cast filter values against the attribute type on purpose
 (`Ash.Query.Operator.Eq` declares `types: [:any, :same]`), so an uncastable
@@ -488,8 +488,10 @@ is present.
 
 ### ash_postgres/integer-past-64-bits-unconverted
 
-Status (2026-09-21): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release.
+Status (2026-09-22): open; reproduces on ash_postgres 2.13.1, which is still the
+newest release. A fix is proposed in
+[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863); all
+five bug tests pass against its head `2302489`.
 
 Trigger: an integer attribute (`bigint`);
 `Ash.Query.filter(Post, score == ^9_223_372_036_854_775_808)`, the same inside
