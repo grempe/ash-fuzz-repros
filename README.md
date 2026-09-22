@@ -7,8 +7,8 @@ and it fails for exactly the reason documented below. Once a release fixes a
 bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
-All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-21, 8 are fixed in
-a release, 6 are fixed on the upstream default branch but not released, and 8
+All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-22, 9 are fixed in
+a release, 8 are fixed on the upstream default branch but not released, and 5
 are open. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
@@ -92,7 +92,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | open | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
-| ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | open, fix proposed | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
+| ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
 | ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | open | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
@@ -102,7 +102,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_lua/host-exception-leaks-to-script | ash-project/ash_lua | a host exception before dispatch reaches the script verbatim | test/ash_lua/host_exception_leaks_to_script_test.exs | fixed on main, unreleased | [#16](https://github.com/ash-project/ash_lua/issues/16) |
 | ash_lua/action-input-merged-under-query-controls | ash-project/ash_lua | action `input` is merged under the query controls | test/ash_lua/action_input_merged_under_controls_test.exs | fixed on main, unreleased | [#15](https://github.com/ash-project/ash_lua/issues/15) |
 | ash_lua/unrendered-query-errors | ash-project/ash_lua | three Ash query errors render as `unknown_error` | test/ash_lua/unrendered_query_errors_test.exs | fixed on main, unreleased | [#18](https://github.com/ash-project/ash_lua/issues/18) |
-| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | open, fix proposed | [#229](https://github.com/ash-project/ash_ai/issues/229) |
+| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | fixed on main, unreleased | [#229](https://github.com/ash-project/ash_ai/issues/229) |
 | ash_ai/scalar-body-echoes-inspected-map | ash-project/ash_ai | a malformed body is echoed as an inspected Elixir term | test/ash_ai/scalar_body_echoes_inspected_map_test.exs | fixed in ash_ai 1.1.0 | [#230](https://github.com/ash-project/ash_ai/issues/230) |
 | ecto/inspect-query-crashes-on-spark-regex-type-param | elixir-ecto/ecto | inspecting a query that holds an MFA-shaped tuple raises, so `Ecto.Query.CastError` cannot be raised | test/ecto/inspect_query_with_spark_regex_type_param_test.exs | closed as fixed in Elixir, unreleased | [#4793](https://github.com/elixir-ecto/ecto/issues/4793) |
 | elixir/macro-to-string-mfa-tuple | elixir-lang/elixir | `Macro.to_string/1` crashes instead of inspecting an MFA-shaped tuple | test/elixir/macro_to_string_mfa_tuple_test.exs | fixed on main, unreleased | [#15903](https://github.com/elixir-lang/elixir/issues/15903) |
@@ -171,7 +171,7 @@ any other value, and a decision for the empty list.
 Status (2026-09-21): fixed in ash 3.33.7 by commit
 [`34e5e5e`](https://github.com/ash-project/ash/commit/34e5e5e), which wraps a
 string parse error in `InvalidFilterValue`; both bug tests pass on the pinned
-release. The issue itself is still open.
+release. The issue was closed on 2026-09-21.
 
 Trigger: `Ash.Query.filter_input(Post, %{"title" => %{"is_nil" => "maybe"}})`;
 on JSON:API `GET /posts?filter[title][is_nil]=maybe`.
@@ -530,10 +530,11 @@ changeset context.
 
 ### ash_json_api/list-valued-query-params-crash
 
-Status (2026-09-21): open; reproduces on ash_json_api 1.7.1, which is still the
-newest release. A fix is proposed in
-[ash_json_api#457](https://github.com/ash-project/ash_json_api/pull/457); all
-four bug tests pass against its head `f259faa`.
+Status (2026-09-22): fixed on main by our
+[ash_json_api#457](https://github.com/ash-project/ash_json_api/pull/457) (commit
+`7c7d25f`, merged 2026-09-22); issue closed. Not released: reproduces on
+ash_json_api 1.7.1, which is still the newest release. All four bug tests pass
+against main.
 
 Trigger: `GET /posts?include[]=comments`, `GET /posts?fields[post][]=title`,
 `GET /posts?page[]=1` and `GET /posts?page[limit][]=1`. The query string
@@ -959,9 +960,10 @@ version with no header selects it as well and then answers `-32020`).
 
 ### ash_ai/malformed-json-rpc-envelope
 
-Status (2026-09-21): open; reproduces on ash_ai 1.1.0. A fix is proposed in
-[ash_ai#238](https://github.com/ash-project/ash_ai/pull/238); all eleven bug
-tests pass against its head `7e6fcc5`.
+Status (2026-09-22): fixed on main by our
+[ash_ai#238](https://github.com/ash-project/ash_ai/pull/238) (commit `e0545a2`,
+merged 2026-09-22); issue closed. Not released: reproduces on ash_ai 1.1.0,
+which is still the newest release. All eleven bug tests pass against main.
 
 | Shape | initialize-based path | 2026-07-28 path |
 |---|---|---|
