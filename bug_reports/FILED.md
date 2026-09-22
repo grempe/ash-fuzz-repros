@@ -11,11 +11,11 @@ Status as of 2026-09-22.
 | ash/sort-input-shape | https://github.com/ash-project/ash/issues/2941 | fixed in ash 3.33.5 |
 | ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | open, fix proposed |
 | ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | open |
-| ash_postgres/uncastable-filter-value-conversion | https://github.com/ash-project/ash_postgres/issues/855 | open, fix proposed |
+| ash_postgres/uncastable-filter-value-conversion | https://github.com/ash-project/ash_postgres/issues/855 | fixed on main, unreleased |
 | ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | fixed on main, unreleased |
 | ash_graphql/negative-page-size-complexity | https://github.com/ash-project/ash_graphql/issues/471 | fixed in ash_graphql 1.12.0 |
 | ash_graphql/null-boolean-filter-crash | https://github.com/ash-project/ash_graphql/issues/472 | fixed in ash_graphql 1.12.0 |
-| ash_graphql/unrendered-invalid-filter-value | https://github.com/ash-project/ash_graphql/issues/473 | open, fix proposed |
+| ash_graphql/unrendered-invalid-filter-value | https://github.com/ash-project/ash_graphql/issues/473 | fixed on main, unreleased |
 | ash_graphql/zero-page-size-unrendered | https://github.com/ash-project/ash_graphql/issues/474 | fixed in ash_graphql 1.12.0 |
 | ash_lua/action-input-merged-under-query-controls | https://github.com/ash-project/ash_lua/issues/15 | fixed on main, unreleased |
 | ash_lua/host-exception-leaks-to-script | https://github.com/ash-project/ash_lua/issues/16 | fixed on main, unreleased |

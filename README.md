@@ -8,7 +8,7 @@ bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
 All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-22, 8 are fixed in
-a release, 8 are fixed on the upstream default branch but not released, and 6
+a release, 10 are fixed on the upstream default branch but not released, and 4
 are open, each with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
@@ -89,13 +89,13 @@ The migrations in `priv/repo/migrations` were generated with
 | ash/predicate-argument-types-unchecked | ash-project/ash | input filters do not check a predicate's argument types against the field, so range predicates on text (and `contains` on an integer) reach Postgres | test/ash/predicate_argument_types_unchecked_test.exs, plus a GraphQL introspection test | fixed in ash 3.33.6 | [#2939](https://github.com/ash-project/ash/issues/2939) |
 | ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | open | [#2940](https://github.com/ash-project/ash/issues/2940) |
 | ash/sort-input-shape | ash-project/ash | `sort_input` with a non-list, non-string value raises (new) | test/ash/sort_input_shape_test.exs | fixed in ash 3.33.5 | [#2941](https://github.com/ash-project/ash/issues/2941) |
-| ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | open, fix proposed | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
+| ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open, fix proposed | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
-| ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | open, fix proposed | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
+| ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | fixed on main, unreleased | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
 | ash_graphql/zero-page-size-unrendered | ash-project/ash_graphql | `first: 0` / `last: 0` is an unrendered error | test/ash_graphql/zero_page_size_test.exs | fixed in ash_graphql 1.12.0 | [#474](https://github.com/ash-project/ash_graphql/issues/474) |
 | absinthe/lone-surrogate-escape-leaks-argument-error | absinthe-graphql/absinthe | `"\ud800"` and a surrogate pair escape leak Erlang's `ArgumentError` text | test/absinthe/lone_surrogate_escape_test.exs | open, fix proposed | [#1458](https://github.com/absinthe-graphql/absinthe/issues/1458) |
 | ash_lua/returned-error-table-converted-only-at-top-level | ash-project/ash_lua | a returned error table keeps nested Lua tuples | test/ash_lua/nested_error_table_test.exs | fixed on main, unreleased | [#17](https://github.com/ash-project/ash_lua/issues/17) |
@@ -336,10 +336,11 @@ validation in the list clause.
 
 ### ash_postgres/uncastable-filter-value-conversion
 
-Status (2026-09-22): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release. A fix is proposed in
-[ash_postgres#864](https://github.com/ash-project/ash_postgres/pull/864); all
-thirteen bug tests pass against its head `d9d5bba`.
+Status (2026-09-22): fixed on main by our
+[ash_postgres#864](https://github.com/ash-project/ash_postgres/pull/864) (commit
+`909d653`, merged 2026-09-22); issue closed. Not released: reproduces on
+ash_postgres 2.13.1, which is still the newest release. All thirteen bug tests
+pass against main.
 
 Ash does not cast filter values against the attribute type on purpose
 (`Ash.Query.Operator.Eq` declares `types: [:any, :same]`), so an uncastable
@@ -669,9 +670,11 @@ turns the 500 into the unrendered error above.
 
 ### ash_graphql/unrendered-invalid-filter-value
 
-Status (2026-09-22): open; reproduces on ash_graphql 1.12.0. A fix is proposed
-in [ash_graphql#477](https://github.com/ash-project/ash_graphql/pull/477); both
-bug tests pass against its head `186d321`.
+Status (2026-09-22): fixed on main by our
+[ash_graphql#477](https://github.com/ash-project/ash_graphql/pull/477) (commit
+`329b5d1`, merged 2026-09-22); issue closed. Not released: reproduces on
+ash_graphql 1.12.0, which is still the newest release. Both bug tests pass
+against main.
 
 Trigger: `getPost(id: "not-a-uuid")` or
 `listPosts(filter: {id: {eq: "not-a-uuid"}})`.
