@@ -7,9 +7,9 @@ and it fails for exactly the reason documented below. Once a release fixes a
 bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
-All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-22, 9 are fixed in
-a release, 8 are fixed on the upstream default branch but not released, and 5
-are open. The table under [Bugs](#bugs) has the status of each.
+All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-22, 8 are fixed in
+a release, 8 are fixed on the upstream default branch but not released, and 6
+are open, each with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
 project, one Ash domain (`Repro.Blog`), two resources (`Repro.Post`,
