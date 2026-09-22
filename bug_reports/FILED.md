@@ -9,7 +9,7 @@ Status as of 2026-09-22.
 | ash/predicate-argument-types-unchecked | https://github.com/ash-project/ash/issues/2939 | fixed in ash 3.33.6 |
 | ash/invalid-page-options-unrendered | https://github.com/ash-project/ash/issues/2940 | open |
 | ash/sort-input-shape | https://github.com/ash-project/ash/issues/2941 | fixed in ash 3.33.5 |
-| ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | open |
+| ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | open, fix proposed |
 | ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | open |
 | ash_postgres/uncastable-filter-value-conversion | https://github.com/ash-project/ash_postgres/issues/855 | open |
 | ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | fixed on main, unreleased |
