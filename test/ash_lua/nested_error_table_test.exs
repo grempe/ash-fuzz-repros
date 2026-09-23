@@ -5,8 +5,13 @@ defmodule Repro.AshLua.NestedErrorTableTest do
   tables, including the `errors` list, stay as lists of `{key, value}` tuples,
   so the result cannot be JSON encoded. The result slot is converted at every
   depth.
+
+  Fixed in ash_lua 0.2.3 (commit 895745e). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_lua 0.2.3"
 
   @bug "ash_lua/returned-error-table-converted-only-at-top-level"
 

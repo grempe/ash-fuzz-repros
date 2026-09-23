@@ -6,8 +6,13 @@ defmodule Repro.AshLua.ActionInputMergedUnderControlsTest do
   Lua float such as `2^63` then reaches `Ash.Query.limit/2` and produces an
   `Ash.Error.Query.InvalidLimit`, which has no Lua rendering. A control key
   `limit = "x"` is the same unrendered error.
+
+  Fixed in ash_lua 0.2.3 (commit 506085c). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_lua 0.2.3"
 
   @bug "ash_lua/action-input-merged-under-query-controls"
 

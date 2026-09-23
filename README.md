@@ -7,8 +7,8 @@ and it fails for exactly the reason documented below. Once a release fixes a
 bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
-All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-22, 8 are fixed in
-a release, 10 are fixed on the upstream default branch but not released, and 4
+All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-23, 13 are fixed in
+a release, 5 are fixed on the upstream default branch but not released, and 4
 are open, each with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
@@ -19,7 +19,7 @@ plain `Plug.Router` driven with `Plug.Test` (no server).
 ## Versions
 
 Every direct dependency is pinned to the newest exact release in `mix.exs`
-(checked 2026-09-21). "Found on" is the release each library was at when the
+(checked 2026-09-23). "Found on" is the release each library was at when the
 bugs were found and filed; the links in the sections below point at those
 releases.
 
@@ -30,8 +30,8 @@ releases.
 | ash_sql | 0.7.6 | 0.7.3 |
 | ash_json_api | 1.7.1 | 1.7.1 |
 | ash_graphql | 1.12.0 | 1.11.0 |
-| ash_lua | 0.2.2 | 0.2.2 |
-| ash_ai | 1.1.0 | 1.0.3 |
+| ash_lua | 0.2.3 | 0.2.2 |
+| ash_ai | 1.1.1 | 1.0.3 |
 | absinthe | 1.12.0 | 1.12.0 |
 | absinthe_plug | 1.5.10 | 1.5.10 |
 | ecto | 3.14.2 | 3.14.2 |
@@ -87,10 +87,10 @@ The migrations in `priv/repo/migrations` were generated with
 | ash/filter-combinator-shape | ash-project/ash | `and` / `or` with a value that is not a non-empty list or map raises `FunctionClauseError` | test/ash/filter_combinator_shape_test.exs | fixed in ash 3.33.6 | [#2937](https://github.com/ash-project/ash/issues/2937) |
 | ash/is-nil-non-boolean-value | ash-project/ash | `is_nil` with a non-boolean is an unknown error | test/ash/is_nil_non_boolean_test.exs | fixed in ash 3.33.7 | [#2938](https://github.com/ash-project/ash/issues/2938) |
 | ash/predicate-argument-types-unchecked | ash-project/ash | input filters do not check a predicate's argument types against the field, so range predicates on text (and `contains` on an integer) reach Postgres | test/ash/predicate_argument_types_unchecked_test.exs, plus a GraphQL introspection test | fixed in ash 3.33.6 | [#2939](https://github.com/ash-project/ash/issues/2939) |
-| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | open | [#2940](https://github.com/ash-project/ash/issues/2940) |
+| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | open, fix proposed | [#2940](https://github.com/ash-project/ash/issues/2940) |
 | ash/sort-input-shape | ash-project/ash | `sort_input` with a non-list, non-string value raises (new) | test/ash/sort_input_shape_test.exs | fixed in ash 3.33.5 | [#2941](https://github.com/ash-project/ash/issues/2941) |
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
-| ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
+| ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open, fix proposed | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open, fix proposed | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
@@ -98,11 +98,11 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_graphql/unrendered-invalid-filter-value | ash-project/ash_graphql | `InvalidFilterValue` has no GraphQL rendering | test/ash_graphql/unrendered_invalid_filter_value_test.exs | fixed on main, unreleased | [#473](https://github.com/ash-project/ash_graphql/issues/473) |
 | ash_graphql/zero-page-size-unrendered | ash-project/ash_graphql | `first: 0` / `last: 0` is an unrendered error | test/ash_graphql/zero_page_size_test.exs | fixed in ash_graphql 1.12.0 | [#474](https://github.com/ash-project/ash_graphql/issues/474) |
 | absinthe/lone-surrogate-escape-leaks-argument-error | absinthe-graphql/absinthe | `"\ud800"` and a surrogate pair escape leak Erlang's `ArgumentError` text | test/absinthe/lone_surrogate_escape_test.exs | open, fix proposed | [#1458](https://github.com/absinthe-graphql/absinthe/issues/1458) |
-| ash_lua/returned-error-table-converted-only-at-top-level | ash-project/ash_lua | a returned error table keeps nested Lua tuples | test/ash_lua/nested_error_table_test.exs | fixed on main, unreleased | [#17](https://github.com/ash-project/ash_lua/issues/17) |
-| ash_lua/host-exception-leaks-to-script | ash-project/ash_lua | a host exception before dispatch reaches the script verbatim | test/ash_lua/host_exception_leaks_to_script_test.exs | fixed on main, unreleased | [#16](https://github.com/ash-project/ash_lua/issues/16) |
-| ash_lua/action-input-merged-under-query-controls | ash-project/ash_lua | action `input` is merged under the query controls | test/ash_lua/action_input_merged_under_controls_test.exs | fixed on main, unreleased | [#15](https://github.com/ash-project/ash_lua/issues/15) |
-| ash_lua/unrendered-query-errors | ash-project/ash_lua | three Ash query errors render as `unknown_error` | test/ash_lua/unrendered_query_errors_test.exs | fixed on main, unreleased | [#18](https://github.com/ash-project/ash_lua/issues/18) |
-| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | fixed on main, unreleased | [#229](https://github.com/ash-project/ash_ai/issues/229) |
+| ash_lua/returned-error-table-converted-only-at-top-level | ash-project/ash_lua | a returned error table keeps nested Lua tuples | test/ash_lua/nested_error_table_test.exs | fixed in ash_lua 0.2.3 | [#17](https://github.com/ash-project/ash_lua/issues/17) |
+| ash_lua/host-exception-leaks-to-script | ash-project/ash_lua | a host exception before dispatch reaches the script verbatim | test/ash_lua/host_exception_leaks_to_script_test.exs | fixed in ash_lua 0.2.3 | [#16](https://github.com/ash-project/ash_lua/issues/16) |
+| ash_lua/action-input-merged-under-query-controls | ash-project/ash_lua | action `input` is merged under the query controls | test/ash_lua/action_input_merged_under_controls_test.exs | fixed in ash_lua 0.2.3 | [#15](https://github.com/ash-project/ash_lua/issues/15) |
+| ash_lua/unrendered-query-errors | ash-project/ash_lua | three Ash query errors render as `unknown_error` | test/ash_lua/unrendered_query_errors_test.exs | fixed in ash_lua 0.2.3 | [#18](https://github.com/ash-project/ash_lua/issues/18) |
+| ash_ai/malformed-json-rpc-envelope | ash-project/ash_ai | malformed JSON-RPC envelopes crash the MCP server | test/ash_ai/malformed_json_rpc_envelope_test.exs | fixed in ash_ai 1.1.1 | [#229](https://github.com/ash-project/ash_ai/issues/229) |
 | ash_ai/scalar-body-echoes-inspected-map | ash-project/ash_ai | a malformed body is echoed as an inspected Elixir term | test/ash_ai/scalar_body_echoes_inspected_map_test.exs | fixed in ash_ai 1.1.0 | [#230](https://github.com/ash-project/ash_ai/issues/230) |
 | ecto/inspect-query-crashes-on-spark-regex-type-param | elixir-ecto/ecto | inspecting a query that holds an MFA-shaped tuple raises, so `Ecto.Query.CastError` cannot be raised | test/ecto/inspect_query_with_spark_regex_type_param_test.exs | closed as fixed in Elixir, unreleased | [#4793](https://github.com/elixir-ecto/ecto/issues/4793) |
 | elixir/macro-to-string-mfa-tuple | elixir-lang/elixir | `Macro.to_string/1` crashes instead of inspecting an MFA-shaped tuple | test/elixir/macro_to_string_mfa_tuple_test.exs | fixed on main, unreleased | [#15903](https://github.com/elixir-lang/elixir/issues/15903) |
@@ -256,7 +256,11 @@ advertising them on other fields.
 
 ### ash/invalid-page-options-unrendered
 
-Status (2026-09-21): open; reproduces on ash 3.33.9.
+Status (2026-09-23): open; reproduces on ash 3.33.9. Claimed by another
+contributor on 2026-09-17 with no PR since; a complete fix is on [grempe/ash
+`fix/invalid-page-options`](https://github.com/ash-project/ash/compare/main...grempe:ash:fix/invalid-page-options),
+linked on the issue on 2026-09-22 and not yet opened as a PR. All seven bug
+tests pass against it.
 
 Trigger: a read action with `pagination keyset?: true, offset?: true`;
 `Ash.read(Post, page: [after: "x", offset: 1])`, and also `page: [limit: 0]`,
@@ -439,8 +443,12 @@ Fix direction: a rescue on the three callbacks like `run_query/2`'s, plus a
 
 ### ash_postgres/nul-byte-in-text
 
-Status (2026-09-21): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release.
+Status (2026-09-23): open; reproduces on ash_postgres 2.13.1, which is still the
+newest release. Claimed by another contributor on 2026-09-17 with no PR since; a
+complete fix is on [grempe/ash_postgres
+`fix/nul-byte-conversion`](https://github.com/ash-project/ash_postgres/compare/main...grempe:ash_postgres:fix/nul-byte-conversion),
+linked on the issue on 2026-09-22 and not yet opened as a PR. All eight bug
+tests pass against it.
 
 Trigger: create or filter with a title containing a NUL byte (`"a" <> <<0>> <> "b"`):
 `Ash.create/2`, `Ash.Query.filter/2`; JSON:API `POST /posts` with that title
@@ -489,10 +497,13 @@ is present.
 
 ### ash_postgres/integer-past-64-bits-unconverted
 
-Status (2026-09-22): open; reproduces on ash_postgres 2.13.1, which is still the
+Status (2026-09-23): open; reproduces on ash_postgres 2.13.1, which is still the
 newest release. A fix is proposed in
-[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863); all
-five bug tests pass against its head `2302489`.
+[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863),
+revised after review to stop parsing Postgrex's message; all five bug tests pass
+against its head `7bf2064`. The maintainer has proposed adding a no-value option
+to `InvalidFilterValue` in Ash first, so the message does not render the missing
+value as `nil`.
 
 Trigger: an integer attribute (`bigint`);
 `Ash.Query.filter(Post, score == ^9_223_372_036_854_775_808)`, the same inside
@@ -804,10 +815,9 @@ of the first bug.
 
 ### ash_lua/returned-error-table-converted-only-at-top-level
 
-Status (2026-09-21): fixed on main by commit
+Status (2026-09-23): fixed in ash_lua 0.2.3 by commit
 [`895745e`](https://github.com/ash-project/ash_lua/commit/895745e); issue
-closed. Not released: reproduces on ash_lua 0.2.2, which is still the newest
-release.
+closed. Both bug tests pass on the pinned release.
 
 Trigger: `local r, err = blog.post.read({ filter = { title = { nope = "x" } } }) return r, err`
 (returning `(result, err)` is the documented calling convention).
@@ -837,12 +847,11 @@ Fix direction: decode the error table recursively, as the raise path does.
 
 ### ash_lua/host-exception-leaks-to-script
 
-Status (2026-09-21): fixed on main by commit
+Status (2026-09-23): fixed in ash_lua 0.2.3 by commit
 [`895745e`](https://github.com/ash-project/ash_lua/commit/895745e); issue
-closed; not released. Both triggers used here stopped raising once Ash fixed the
+closed. Both triggers used here had already stopped raising once Ash fixed the
 crashes underneath them (the sort case in ash 3.33.5, the filter case in ash
-3.33.6), so the two bug tests pass on the pinned releases and are tagged
-`fixed_in:` with those Ash versions.
+3.33.6), so the two bug tests stay tagged `fixed_in:` with those Ash versions.
 
 Trigger: `blog.post.read({ filter = { ["or"] = {} } })` and
 `blog.post.read({ sort = 5 })`.
@@ -881,10 +890,9 @@ structured error as `(nil, err)`; never put host exception text in a
 
 ### ash_lua/action-input-merged-under-query-controls
 
-Status (2026-09-21): fixed on main by commit
+Status (2026-09-23): fixed in ash_lua 0.2.3 by commit
 [`506085c`](https://github.com/ash-project/ash_lua/commit/506085c); issue
-closed. Not released: reproduces on ash_lua 0.2.2, which is still the newest
-release.
+closed. All three bug tests pass on the pinned release.
 
 Trigger: a read action with an argument named `limit`;
 `blog.post.search({ input = { limit = 1 } })` with three posts, and
@@ -920,10 +928,9 @@ collision in the verifier; add a rendering for `InvalidLimit`.
 
 ### ash_lua/unrendered-query-errors
 
-Status (2026-09-21): fixed on main by commit
+Status (2026-09-23): fixed in ash_lua 0.2.3 by commit
 [`895745e`](https://github.com/ash-project/ash_lua/commit/895745e); issue
-closed. Not released: reproduces on ash_lua 0.2.2, which is still the newest
-release.
+closed. All three bug tests pass on the pinned release.
 
 Trigger: `blog.post.read({ filter = { id = "not-a-uuid" } })`
 (`InvalidFilterValue`), `{ filter = { title = { nope = "x" } } }`
@@ -969,10 +976,9 @@ version with no header selects it as well and then answers `-32020`).
 
 ### ash_ai/malformed-json-rpc-envelope
 
-Status (2026-09-22): fixed on main by our
-[ash_ai#238](https://github.com/ash-project/ash_ai/pull/238) (commit `e0545a2`,
-merged 2026-09-22); issue closed. Not released: reproduces on ash_ai 1.1.0,
-which is still the newest release. All eleven bug tests pass against main.
+Status (2026-09-23): fixed in ash_ai 1.1.1 by our
+[ash_ai#238](https://github.com/ash-project/ash_ai/pull/238) (commit `e0545a2`);
+issue closed. All eleven bug tests pass on the pinned release.
 
 | Shape | initialize-based path | 2026-07-28 path |
 |---|---|---|

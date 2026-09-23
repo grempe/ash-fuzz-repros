@@ -4,8 +4,13 @@ defmodule Repro.AshLua.UnrenderedQueryErrorsTest do
   `NoSuchFilterPredicate` and `NoSuchField` have no `AshLua.Error`
   implementation, so a script gets `unknown_error` with a uuid instead of a
   structured error naming the field.
+
+  Fixed in ash_lua 0.2.3 (commit 895745e). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_lua 0.2.3"
 
   @bug "ash_lua/unrendered-query-errors"
 

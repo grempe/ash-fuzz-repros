@@ -9,8 +9,13 @@ defmodule Repro.AshAi.MalformedJsonRpcEnvelopeTest do
   Paths: the initialize-based `2025-06-18` / `2025-03-26` path (no
   `MCP-Protocol-Version` header, no `_meta`) and the per-request `2026-07-28`
   path (header plus `_meta` in `params`).
+
+  Fixed in ash_ai 1.1.1 (ash-project/ash_ai#238). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_ai 1.1.1"
 
   @bug "ash_ai/malformed-json-rpc-envelope"
   @batch ["FunctionClauseError", "AshAi.Mcp.Server.parse_json_rpc/1"]
