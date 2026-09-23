@@ -256,11 +256,10 @@ advertising them on other fields.
 
 ### ash/invalid-page-options-unrendered
 
-Status (2026-09-23): open; reproduces on ash 3.33.9. Claimed by another
-contributor on 2026-09-17 with no PR since; a complete fix is on [grempe/ash
-`fix/invalid-page-options`](https://github.com/ash-project/ash/compare/main...grempe:ash:fix/invalid-page-options),
-linked on the issue on 2026-09-22 and not yet opened as a PR. All seven bug
-tests pass against it.
+Status (2026-09-23): open; reproduces on ash 3.33.9. A fix is proposed in
+[ash#2963](https://github.com/ash-project/ash/pull/2963), opened after the
+contributor who claimed the issue did not reply to a check-in; all seven bug
+tests pass against its head `40461e0`.
 
 Trigger: a read action with `pagination keyset?: true, offset?: true`;
 `Ash.read(Post, page: [after: "x", offset: 1])`, and also `page: [limit: 0]`,
@@ -444,11 +443,10 @@ Fix direction: a rescue on the three callbacks like `run_query/2`'s, plus a
 ### ash_postgres/nul-byte-in-text
 
 Status (2026-09-23): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release. Claimed by another contributor on 2026-09-17 with no PR since; a
-complete fix is on [grempe/ash_postgres
-`fix/nul-byte-conversion`](https://github.com/ash-project/ash_postgres/compare/main...grempe:ash_postgres:fix/nul-byte-conversion),
-linked on the issue on 2026-09-22 and not yet opened as a PR. All eight bug
-tests pass against it.
+newest release. A fix is proposed in
+[ash_postgres#866](https://github.com/ash-project/ash_postgres/pull/866), opened
+after the contributor who claimed the issue did not reply to a check-in; all
+eight bug tests pass against its head `0ee4eec`.
 
 Trigger: create or filter with a title containing a NUL byte (`"a" <> <<0>> <> "b"`):
 `Ash.create/2`, `Ash.Query.filter/2`; JSON:API `POST /posts` with that title
