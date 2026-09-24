@@ -1,16 +1,16 @@
 # Filed issues (2026-09-15)
 
-Status as of 2026-09-23.
+Status as of 2026-09-24.
 
 | Bug | Issue | Status |
 |---|---|---|
 | ash/filter-combinator-shape | https://github.com/ash-project/ash/issues/2937 | fixed in ash 3.33.6 |
 | ash/is-nil-non-boolean-value | https://github.com/ash-project/ash/issues/2938 | fixed in ash 3.33.7 |
 | ash/predicate-argument-types-unchecked | https://github.com/ash-project/ash/issues/2939 | fixed in ash 3.33.6 |
-| ash/invalid-page-options-unrendered | https://github.com/ash-project/ash/issues/2940 | open, fix proposed |
+| ash/invalid-page-options-unrendered | https://github.com/ash-project/ash/issues/2940 | fixed on main, unreleased |
 | ash/sort-input-shape | https://github.com/ash-project/ash/issues/2941 | fixed in ash 3.33.5 |
-| ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | open, fix proposed |
-| ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | open, fix proposed |
+| ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | fixed on main, unreleased |
+| ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | fixed on main, unreleased |
 | ash_postgres/uncastable-filter-value-conversion | https://github.com/ash-project/ash_postgres/issues/855 | fixed on main, unreleased |
 | ash_json_api/list-valued-query-params-crash | https://github.com/ash-project/ash_json_api/issues/456 | fixed on main, unreleased |
 | ash_graphql/negative-page-size-complexity | https://github.com/ash-project/ash_graphql/issues/471 | fixed in ash_graphql 1.12.0 |

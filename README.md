@@ -7,9 +7,9 @@ and it fails for exactly the reason documented below. Once a release fixes a
 bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
-All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-23, 13 are fixed in
-a release, 5 are fixed on the upstream default branch but not released, and 4
-are open, each with a fix proposed. The table under [Bugs](#bugs) has the status of each.
+All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-24, 13 are fixed in
+a release, 8 are fixed on the upstream default branch but not released, and 1
+is open, with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
 project, one Ash domain (`Repro.Blog`), two resources (`Repro.Post`,
@@ -87,11 +87,11 @@ The migrations in `priv/repo/migrations` were generated with
 | ash/filter-combinator-shape | ash-project/ash | `and` / `or` with a value that is not a non-empty list or map raises `FunctionClauseError` | test/ash/filter_combinator_shape_test.exs | fixed in ash 3.33.6 | [#2937](https://github.com/ash-project/ash/issues/2937) |
 | ash/is-nil-non-boolean-value | ash-project/ash | `is_nil` with a non-boolean is an unknown error | test/ash/is_nil_non_boolean_test.exs | fixed in ash 3.33.7 | [#2938](https://github.com/ash-project/ash/issues/2938) |
 | ash/predicate-argument-types-unchecked | ash-project/ash | input filters do not check a predicate's argument types against the field, so range predicates on text (and `contains` on an integer) reach Postgres | test/ash/predicate_argument_types_unchecked_test.exs, plus a GraphQL introspection test | fixed in ash 3.33.6 | [#2939](https://github.com/ash-project/ash/issues/2939) |
-| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | open, fix proposed | [#2940](https://github.com/ash-project/ash/issues/2940) |
+| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | fixed on main, unreleased | [#2940](https://github.com/ash-project/ash/issues/2940) |
 | ash/sort-input-shape | ash-project/ash | `sort_input` with a non-list, non-string value raises (new) | test/ash/sort_input_shape_test.exs | fixed in ash 3.33.5 | [#2941](https://github.com/ash-project/ash/issues/2941) |
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
-| ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | open, fix proposed | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
-| ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | open, fix proposed | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
+| ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | fixed on main, unreleased | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
+| ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | fixed on main, unreleased | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
@@ -256,10 +256,10 @@ advertising them on other fields.
 
 ### ash/invalid-page-options-unrendered
 
-Status (2026-09-23): open; reproduces on ash 3.33.9. A fix is proposed in
-[ash#2963](https://github.com/ash-project/ash/pull/2963), opened after the
-contributor who claimed the issue did not reply to a check-in; all seven bug
-tests pass against its head `40461e0`.
+Status (2026-09-24): fixed on main by our
+[ash#2963](https://github.com/ash-project/ash/pull/2963) (commit `8ce2762`,
+merged 2026-09-24); issue closed. Not released: reproduces on ash 3.33.9. All
+seven bug tests pass against the merged branch.
 
 Trigger: a read action with `pagination keyset?: true, offset?: true`;
 `Ash.read(Post, page: [after: "x", offset: 1])`, and also `page: [limit: 0]`,
@@ -442,11 +442,10 @@ Fix direction: a rescue on the three callbacks like `run_query/2`'s, plus a
 
 ### ash_postgres/nul-byte-in-text
 
-Status (2026-09-23): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release. A fix is proposed in
-[ash_postgres#866](https://github.com/ash-project/ash_postgres/pull/866), opened
-after the contributor who claimed the issue did not reply to a check-in; all
-eight bug tests pass against its head `0ee4eec`.
+Status (2026-09-24): fixed on main by our
+[ash_postgres#866](https://github.com/ash-project/ash_postgres/pull/866) (commit
+`945073e`, merged 2026-09-24); issue closed. Not released: reproduces on
+ash_postgres 2.13.1. All eight bug tests pass against the merged branch.
 
 Trigger: create or filter with a title containing a NUL byte (`"a" <> <<0>> <> "b"`):
 `Ash.create/2`, `Ash.Query.filter/2`; JSON:API `POST /posts` with that title
@@ -495,13 +494,12 @@ is present.
 
 ### ash_postgres/integer-past-64-bits-unconverted
 
-Status (2026-09-23): open; reproduces on ash_postgres 2.13.1, which is still the
-newest release. A fix is proposed in
-[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863),
-revised after review to stop parsing Postgrex's message; all five bug tests pass
-against its head `7bf2064`. The maintainer has proposed adding a no-value option
-to `InvalidFilterValue` in Ash first, so the message does not render the missing
-value as `nil`.
+Status (2026-09-24): fixed on main by our
+[ash_postgres#863](https://github.com/ash-project/ash_postgres/pull/863) (commit
+`2209c09`, merged 2026-09-24), in the revised form that does not parse
+Postgrex's message, so the value and attribute are not reported; issue closed.
+Not released: reproduces on ash_postgres 2.13.1. All five bug tests pass against
+the merged branch.
 
 Trigger: an integer attribute (`bigint`);
 `Ash.Query.filter(Post, score == ^9_223_372_036_854_775_808)`, the same inside
