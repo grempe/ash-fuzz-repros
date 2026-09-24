@@ -7,7 +7,7 @@ Status as of 2026-09-24.
 | ash/filter-combinator-shape | https://github.com/ash-project/ash/issues/2937 | fixed in ash 3.33.6 |
 | ash/is-nil-non-boolean-value | https://github.com/ash-project/ash/issues/2938 | fixed in ash 3.33.7 |
 | ash/predicate-argument-types-unchecked | https://github.com/ash-project/ash/issues/2939 | fixed in ash 3.33.6 |
-| ash/invalid-page-options-unrendered | https://github.com/ash-project/ash/issues/2940 | fixed on main, unreleased |
+| ash/invalid-page-options-unrendered | https://github.com/ash-project/ash/issues/2940 | fixed in ash 3.33.10 |
 | ash/sort-input-shape | https://github.com/ash-project/ash/issues/2941 | fixed in ash 3.33.5 |
 | ash_postgres/integer-past-64-bits-unconverted | https://github.com/ash-project/ash_postgres/issues/853 | fixed on main, unreleased |
 | ash_postgres/nul-byte-in-text | https://github.com/ash-project/ash_postgres/issues/854 | fixed on main, unreleased |

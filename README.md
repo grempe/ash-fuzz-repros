@@ -7,8 +7,8 @@ and it fails for exactly the reason documented below. Once a release fixes a
 bug, the pin moves to that release, the test is tagged `fixed_in:` and it is
 kept as a passing regression check. `mix repros.check` verifies both.
 
-All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-24, 13 are fixed in
-a release, 8 are fixed on the upstream default branch but not released, and 1
+All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-24, 14 are fixed in
+a release, 7 are fixed on the upstream default branch but not released, and 1
 is open, with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
@@ -19,13 +19,13 @@ plain `Plug.Router` driven with `Plug.Test` (no server).
 ## Versions
 
 Every direct dependency is pinned to the newest exact release in `mix.exs`
-(checked 2026-09-23). "Found on" is the release each library was at when the
+(checked 2026-09-24). "Found on" is the release each library was at when the
 bugs were found and filed; the links in the sections below point at those
 releases.
 
 | Library | Pinned | Found on |
 |---|---|---|
-| ash | 3.33.9 | 3.33.3 |
+| ash | 3.33.10 | 3.33.3 |
 | ash_postgres | 2.13.1 | 2.13.1 |
 | ash_sql | 0.7.6 | 0.7.3 |
 | ash_json_api | 1.7.1 | 1.7.1 |
@@ -87,7 +87,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash/filter-combinator-shape | ash-project/ash | `and` / `or` with a value that is not a non-empty list or map raises `FunctionClauseError` | test/ash/filter_combinator_shape_test.exs | fixed in ash 3.33.6 | [#2937](https://github.com/ash-project/ash/issues/2937) |
 | ash/is-nil-non-boolean-value | ash-project/ash | `is_nil` with a non-boolean is an unknown error | test/ash/is_nil_non_boolean_test.exs | fixed in ash 3.33.7 | [#2938](https://github.com/ash-project/ash/issues/2938) |
 | ash/predicate-argument-types-unchecked | ash-project/ash | input filters do not check a predicate's argument types against the field, so range predicates on text (and `contains` on an integer) reach Postgres | test/ash/predicate_argument_types_unchecked_test.exs, plus a GraphQL introspection test | fixed in ash 3.33.6 | [#2939](https://github.com/ash-project/ash/issues/2939) |
-| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | fixed on main, unreleased | [#2940](https://github.com/ash-project/ash/issues/2940) |
+| ash/invalid-page-options-unrendered | ash-project/ash | invalid `page` options are an unrendered `Spark.Options.ValidationError`; a non-list `page` raises | test/ash/invalid_page_options_test.exs | fixed in ash 3.33.10 | [#2940](https://github.com/ash-project/ash/issues/2940) |
 | ash/sort-input-shape | ash-project/ash | `sort_input` with a non-list, non-string value raises (new) | test/ash/sort_input_shape_test.exs | fixed in ash 3.33.5 | [#2941](https://github.com/ash-project/ash/issues/2941) |
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | fixed on main, unreleased | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
@@ -256,10 +256,9 @@ advertising them on other fields.
 
 ### ash/invalid-page-options-unrendered
 
-Status (2026-09-24): fixed on main by our
-[ash#2963](https://github.com/ash-project/ash/pull/2963) (commit `8ce2762`,
-merged 2026-09-24); issue closed. Not released: reproduces on ash 3.33.9. All
-seven bug tests pass against the merged branch.
+Status (2026-09-24): fixed in ash 3.33.10 by our
+[ash#2963](https://github.com/ash-project/ash/pull/2963) (commit `8ce2762`);
+issue closed. All seven bug tests pass on the pinned release.
 
 Trigger: a read action with `pagination keyset?: true, offset?: true`;
 `Ash.read(Post, page: [after: "x", offset: 1])`, and also `page: [limit: 0]`,

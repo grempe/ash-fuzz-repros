@@ -5,8 +5,13 @@ defmodule Repro.Ash.InvalidPageOptionsTest do
   invalid-class error: `after` plus `offset` on an action with keyset and
   offset pagination, a limit of 0, -1 or "x", or a negative offset. JSON:API
   answers 500 for all of them. A non-list `page` value raises.
+
+  Fixed in ash 3.33.10 (ash-project/ash#2963). The bug tests pass on the pinned release
+  and are kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash 3.33.10"
 
   @bug "ash/invalid-page-options-unrendered"
   @signature ["Spark.Options.ValidationError", "invalid value for :page option"]
