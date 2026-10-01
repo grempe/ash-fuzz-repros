@@ -10,8 +10,8 @@ kept as a passing regression check. `mix repros.check` verifies both.
 All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-24, 14 are fixed in
 a release, 7 are fixed on the upstream default branch but not released, and 1
 is open, with a fix proposed. A 23rd bug, ash_postgres/migration-sql-not-escaped,
-was found on 2026-09-30 while generating migrations (not by fuzzing) and is not
-yet filed. The table under [Bugs](#bugs) has the status of each.
+was found on 2026-09-30 while generating migrations (not by fuzzing) and was
+filed on 2026-10-01 with a fix proposed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
 project, one Ash domain (`Repro.Blog`), two resources (`Repro.Post`,
@@ -94,7 +94,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | fixed on main, unreleased | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | fixed on main, unreleased | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
-| ash_postgres/migration-sql-not-escaped | ash-project/ash_postgres | the migration generator writes raw SQL into Elixir string literals unescaped, so `\d` in a check constraint reaches Postgres as U+007F | test/ash_postgres/migration_sql_not_escaped_test.exs | not yet filed | |
+| ash_postgres/migration-sql-not-escaped | ash-project/ash_postgres | the migration generator writes raw SQL into Elixir string literals unescaped, so `\d` in a check constraint reaches Postgres as U+007F | test/ash_postgres/migration_sql_not_escaped_test.exs | open, fix proposed | [#876](https://github.com/ash-project/ash_postgres/issues/876) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
@@ -542,8 +542,12 @@ changeset context.
 
 ### ash_postgres/migration-sql-not-escaped
 
-Status (2026-09-30): not yet filed. Reproduces on ash_postgres 2.13.1 and on
-the default branch at `63cf7ca` (with ash `f3aa1b8` and ash_sql `d4fad6a`).
+Status (2026-10-01): open as
+[ash_postgres#876](https://github.com/ash-project/ash_postgres/issues/876), with
+our fix in [ash_postgres#877](https://github.com/ash-project/ash_postgres/pull/877).
+Reproduces on ash_postgres 2.13.1 and on the default branch at `63cf7ca` (with
+ash `f3aa1b8` and ash_sql `d4fad6a`); all four bug tests pass against the PR
+branch.
 Found while generating migrations for an application, not by fuzzing.
 
 Trigger: a resource whose check constraint SQL contains a backslash, here
