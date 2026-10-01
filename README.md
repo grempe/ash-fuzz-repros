@@ -9,7 +9,9 @@ kept as a passing regression check. `mix repros.check` verifies both.
 
 All 22 bugs were filed upstream on 2026-09-15. As of 2026-09-24, 14 are fixed in
 a release, 7 are fixed on the upstream default branch but not released, and 1
-is open, with a fix proposed. The table under [Bugs](#bugs) has the status of each.
+is open, with a fix proposed. A 23rd bug, ash_postgres/migration-sql-not-escaped,
+was found on 2026-09-30 while generating migrations (not by fuzzing) and is not
+yet filed. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
 project, one Ash domain (`Repro.Blog`), two resources (`Repro.Post`,
@@ -92,6 +94,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed on main, unreleased | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | fixed on main, unreleased | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | fixed on main, unreleased | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
+| ash_postgres/migration-sql-not-escaped | ash-project/ash_postgres | the migration generator writes raw SQL into Elixir string literals unescaped, so `\d` in a check constraint reaches Postgres as U+007F | test/ash_postgres/migration_sql_not_escaped_test.exs | not yet filed | |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
@@ -536,6 +539,71 @@ Default branch: present, unchanged at `97ffea9`.
 Fix direction: a `handle_raised_error/4` clause for `DBConnection.EncodeError`
 mapping to `InvalidFilterValue` in a query context and `InvalidAttribute` in a
 changeset context.
+
+### ash_postgres/migration-sql-not-escaped
+
+Status (2026-09-30): not yet filed. Reproduces on ash_postgres 2.13.1 and on
+the default branch at `63cf7ca` (with ash `f3aa1b8` and ash_sql `d4fad6a`).
+Found while generating migrations for an application, not by fuzzing.
+
+Trigger: a resource whose check constraint SQL contains a backslash, here
+`check_constraint :escaped, "escaped_four_digits", check: "escaped ~ '^\\d{4}$'"`
+(the SQL is `escaped ~ '^\d{4}$'`), then `mix ash.codegen` and a migration.
+The test generates the migration into a temporary directory with
+`AshPostgres.MigrationGenerator.generate/2` and runs it in the sandbox.
+
+Observed: the generated migration holds the SQL verbatim in heredocs, while
+the custom index next to it is escaped:
+
+```elixir
+create constraint(:escape_codes, :escaped_four_digits,
+         check: """
+           escaped ~ '^\d{4}$'
+         """
+       )
+
+create index(:escape_codes, [:escaped],
+         name: "escape_codes_digit_index",
+         where: "escaped ~ '\\d'"
+       )
+
+execute("""
+COMMENT ON TABLE escape_codes IS 'a\db'
+""")
+```
+
+Elixir reads `\d` in a heredoc as DEL (U+007F), so `pg_get_constraintdef`
+returns the constraint with U+007F in place of `\d`, and
+`Ash.create(Code, %{escaped: "1234"})` fails the check (`InvalidAttribute`,
+`constraint: "escaped_four_digits"`). `mix ash.codegen --check` reports nothing
+pending, because the snapshot holds the declared SQL. Other escapes change too
+(`\s` becomes a space, `\b` a backspace, `\A`, `\Z` and `\w` lose the
+backslash, with no compiler warning), and `#{...}` is interpolated:
+`label <> '#{1 + 1}'` is stored as `label <> '2'`. The custom statement's table
+comment is stored with U+007F. An identity on a resource with
+`base_filter_sql ~S|"archived" = false|` is written as
+`where: "("archived" = false)"`, so `mix ash.codegen` raises
+`SyntaxError: syntax error before: archived` while formatting the file.
+
+Expected: Postgres receives the SQL the resource declares.
+
+Failure point:
+[lib/migration_generator/operation.ex](https://github.com/ash-project/ash_postgres/blob/v2.13.1/lib/migration_generator/operation.ex)
+interpolates the SQL into the generated source with `#{...}`: the
+`check: """` heredocs in `AddCheckConstraint.up/1` (L1581, L1587) and
+`RemoveCheckConstraint.down/1` (L1626, L1632), the `execute("""` heredocs in
+`AddCustomStatement.up/1` and `down/1` (L1156, L1168), and
+`where: \"#{base_filter}\"` in `AddUniqueIndex.up/1` (L1123). `custom_indexes`
+`where:` goes through `option/2`, which uses `inspect/1`, and arrives intact.
+
+Default branch: present at `63cf7ca` (L1737, L1743, L1782, L1788, L1247,
+L1259, L1126).
+
+Fix direction: escape the SQL before placing it in the generated source.
+Escaping `\`, `#{` and `"""` for the heredoc sites and writing the unique
+index's base filter with `inspect(base_filter, printable_limit: :infinity)`
+makes all four bug tests pass on `63cf7ca`; plain `inspect/1` truncates strings
+longer than 4096 bytes. Migrations generated before a fix keep the altered SQL.
 
 ## ash-project/ash_json_api
 
