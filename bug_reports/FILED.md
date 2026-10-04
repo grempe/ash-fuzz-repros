@@ -26,4 +26,4 @@ Status as of 2026-10-04.
 | absinthe/lone-surrogate-escape-leaks-argument-error | https://github.com/absinthe-graphql/absinthe/issues/1458 | open, fix proposed |
 | ecto/inspect-query-crashes-on-spark-regex-type-param | https://github.com/elixir-ecto/ecto/issues/4793 | closed as fixed in Elixir, unreleased |
 | elixir/macro-to-string-mfa-tuple | https://github.com/elixir-lang/elixir/issues/15903 | fixed on main, unreleased |
-| ash_postgres/migration-sql-not-escaped (filed 2026-10-01) | https://github.com/ash-project/ash_postgres/issues/876 | closed 2026-10-04; fix deferred to ash_postgres 3.0 as breaking; docs and `3.0:` markers in ash_postgres#880; still reproduces |
+| ash_postgres/migration-sql-not-escaped (filed 2026-10-01) | https://github.com/ash-project/ash_postgres/issues/876 | closed 2026-10-04; fix deferred to ash_postgres 3.0 as breaking; docs and `3.0:` markers in ash_postgres#880 (merged); still reproduces |

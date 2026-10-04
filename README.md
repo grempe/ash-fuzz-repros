@@ -555,8 +555,8 @@ refuses `"12a4"`.
 Follow-up (2026-10-04): the maintainer agreed the behaviour should change, but
 since fixing it breaks anyone who escapes the SQL themselves, it is deferred to
 ash_postgres 3.0. At his request we opened
-[ash_postgres#880](https://github.com/ash-project/ash_postgres/pull/880), which
-marks each affected site with a `3.0:` comment and documents the current
+[ash_postgres#880](https://github.com/ash-project/ash_postgres/pull/880) (merged
+2026-10-04 as `3e60c9c`, not yet released), which marks each affected site with a `3.0:` comment and documents the current
 behaviour on `check`, custom statement `up`/`down`, `base_filter_sql`,
 `identity_wheres_to_sql` and `calculations_to_sql`.
 Found while generating migrations for an application, not by fuzzing.
