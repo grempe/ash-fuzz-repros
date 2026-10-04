@@ -7,8 +7,13 @@ defmodule Repro.AshPostgres.UncastableFilterValueConversionTest do
   have no rescue, and `handle_raised_error/4` does not unwrap an
   `Ecto.SubQueryError` that carries the cast error, so the conversion happens
   only where a rescue exists and the error is a bare cast error.
+
+  Fixed in ash_postgres 2.14.0 (ash-project/ash_postgres#864). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_postgres 2.14.0"
 
   @bug "ash_postgres/uncastable-filter-value-conversion"
   @cast_error ["Ecto.Query.CastError", "not-a-uuid"]

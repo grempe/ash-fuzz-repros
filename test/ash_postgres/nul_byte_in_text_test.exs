@@ -8,8 +8,13 @@ defmodule Repro.AshPostgres.NulByteInTextTest do
   the attribute is possible only by inspecting the changeset. Postgrex considers sanitising the application's job
   (elixir-ecto/postgrex#568). Invalid UTF-8 fails the same way; only a Lua
   literal can carry it, since JSON transports refuse it on decoding.
+
+  Fixed in ash_postgres 2.14.0 (ash-project/ash_postgres#866). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_postgres 2.14.0"
 
   @bug "ash_postgres/nul-byte-in-text"
   @signature ["Postgrex.Error", "22021", "character_not_in_repertoire"]

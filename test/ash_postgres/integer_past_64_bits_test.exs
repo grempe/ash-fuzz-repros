@@ -5,8 +5,13 @@ defmodule Repro.AshPostgres.IntegerPast64BitsTest do
   no 64-bit limit), and Postgrex raises `DBConnection.EncodeError` when it
   encodes the parameter. `handle_raised_error/4` has no clause for that error,
   so a read or a create returns `Ash.Error.Unknown` and JSON:API answers 500.
+
+  Fixed in ash_postgres 2.14.0 (ash-project/ash_postgres#863). The bug tests pass on the pinned release and are
+  kept as regression checks; `signature:` records how they used to fail.
   """
   use Repro.Case, async: false
+
+  @moduletag fixed_in: "ash_postgres 2.14.0"
 
   @bug "ash_postgres/integer-past-64-bits-unconverted"
   @signature ["DBConnection.EncodeError", "Postgrex expected an integer in"]
