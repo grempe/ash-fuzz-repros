@@ -11,8 +11,8 @@ All 22 bugs were filed upstream on 2026-09-15. As of 2026-10-04, 17 are fixed in
 a release, 4 are fixed on the upstream default branch but not released, and 1
 is open, with a fix proposed. A 23rd bug, ash_postgres/migration-sql-not-escaped,
 was found on 2026-09-30 while generating migrations (not by fuzzing), filed on
-2026-10-01 with a fix, and closed by the maintainer on 2026-10-04 without a code
-change; it still reproduces. The table under [Bugs](#bugs) has the status of each.
+2026-10-01 with a fix, and closed on 2026-10-04 with the fix deferred to
+ash_postgres 3.0 as a breaking change; it still reproduces. The table under [Bugs](#bugs) has the status of each.
 
 Nothing here is specific to the application the bugs were found in: one Mix
 project, one Ash domain (`Repro.Blog`), two resources (`Repro.Post`,
@@ -95,7 +95,7 @@ The migrations in `priv/repo/migrations` were generated with
 | ash_postgres/uncastable-filter-value-conversion | ash-project/ash_postgres | `Ecto.Query.CastError` is converted only where a rescue exists, and `Ecto.SubQueryError` is never unwrapped | test/ash_postgres/uncastable_filter_value_conversion_test.exs | fixed in ash_postgres 2.14.0 | [#855](https://github.com/ash-project/ash_postgres/issues/855) |
 | ash_postgres/nul-byte-in-text | ash-project/ash_postgres | a NUL byte in text is an unconverted `Postgrex.Error` | test/ash_postgres/nul_byte_in_text_test.exs | fixed in ash_postgres 2.14.0 | [#854](https://github.com/ash-project/ash_postgres/issues/854) |
 | ash_postgres/integer-past-64-bits-unconverted | ash-project/ash_postgres | an integer outside the `bigint` range is an unconverted `DBConnection.EncodeError` | test/ash_postgres/integer_past_64_bits_test.exs | fixed in ash_postgres 2.14.0 | [#853](https://github.com/ash-project/ash_postgres/issues/853) |
-| ash_postgres/migration-sql-not-escaped | ash-project/ash_postgres | the migration generator writes raw SQL into Elixir string literals unescaped, so `\d` in a check constraint reaches Postgres as U+007F | test/ash_postgres/migration_sql_not_escaped_test.exs | closed upstream without a fix (use `~S()`); reproduces | [#876](https://github.com/ash-project/ash_postgres/issues/876) |
+| ash_postgres/migration-sql-not-escaped | ash-project/ash_postgres | the migration generator writes raw SQL into Elixir string literals unescaped, so `\d` in a check constraint reaches Postgres as U+007F | test/ash_postgres/migration_sql_not_escaped_test.exs | closed upstream; fix deferred to ash_postgres 3.0, docs in [#880](https://github.com/ash-project/ash_postgres/pull/880); reproduces | [#876](https://github.com/ash-project/ash_postgres/issues/876) |
 | ash_json_api/list-valued-query-params-crash | ash-project/ash_json_api | `include[]`, `fields[post][]`, `page[]` and `page[limit][]` raise | test/ash_json_api/list_valued_query_params_test.exs | fixed on main, unreleased | [#456](https://github.com/ash-project/ash_json_api/issues/456) |
 | ash_graphql/null-boolean-filter-crash | ash-project/ash_graphql | `{and: null}`, `{or: null}`, `{not: null}`, `{not: []}` and a two-element `not` crash | test/ash_graphql/null_boolean_filter_test.exs | fixed in ash_graphql 1.12.0 | [#472](https://github.com/ash-project/ash_graphql/issues/472) |
 | ash_graphql/negative-page-size-complexity | ash-project/ash_graphql | a negative page size crashes complexity analysis | test/ash_graphql/negative_page_size_complexity_test.exs | fixed in ash_graphql 1.12.0 | [#471](https://github.com/ash-project/ash_graphql/issues/471) |
@@ -551,6 +551,14 @@ branch. Checked on 2.14.2: `~S(a ~ '^\d{4}$')` is the same string as the one in
 this test and still stores U+007F; doubling the backslash inside the sigil,
 `~S(b ~ '^\\d{4}$')`, stores the intended constraint, accepts `"1234"` and
 refuses `"12a4"`.
+
+Follow-up (2026-10-04): the maintainer agreed the behaviour should change, but
+since fixing it breaks anyone who escapes the SQL themselves, it is deferred to
+ash_postgres 3.0. At his request we opened
+[ash_postgres#880](https://github.com/ash-project/ash_postgres/pull/880), which
+marks each affected site with a `3.0:` comment and documents the current
+behaviour on `check`, custom statement `up`/`down`, `base_filter_sql`,
+`identity_wheres_to_sql` and `calculations_to_sql`.
 Found while generating migrations for an application, not by fuzzing.
 
 Trigger: a resource whose check constraint SQL contains a backslash, here
