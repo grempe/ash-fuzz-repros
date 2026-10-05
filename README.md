@@ -22,15 +22,15 @@ plain `Plug.Router` driven with `Plug.Test` (no server).
 ## Versions
 
 Every direct dependency is pinned to the newest exact release in `mix.exs`
-(checked 2026-10-04). "Found on" is the release each library was at when the
+(checked 2026-10-05). "Found on" is the release each library was at when the
 bugs were found and filed; the links in the sections below point at those
 releases.
 
 | Library | Pinned | Found on |
 |---|---|---|
-| ash | 3.34.2 | 3.33.3 |
+| ash | 3.34.4 | 3.33.3 |
 | ash_postgres | 2.14.2 | 2.13.1 |
-| ash_sql | 0.8.0 | 0.7.3 |
+| ash_sql | 0.8.1 | 0.7.3 |
 | ash_json_api | 1.7.1 | 1.7.1 |
 | ash_graphql | 1.12.0 | 1.11.0 |
 | ash_lua | 0.2.3 | 0.2.2 |
