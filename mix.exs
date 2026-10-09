@@ -29,8 +29,8 @@ defmodule Repro.MixProject do
   # verified against. See README.md for the versions the bugs were found on.
   defp deps do
     [
-      {:ash, "== 3.34.5"},
-      {:ash_postgres, "== 2.14.3"},
+      {:ash, "== 3.34.6"},
+      {:ash_postgres, "== 2.14.5"},
       {:ash_sql, "== 0.8.1"},
       {:ash_json_api, "== 1.7.1"},
       {:ash_graphql, "== 1.12.0"},

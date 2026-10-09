@@ -22,14 +22,14 @@ plain `Plug.Router` driven with `Plug.Test` (no server).
 ## Versions
 
 Every direct dependency is pinned to the newest exact release in `mix.exs`
-(checked 2026-10-08). "Found on" is the release each library was at when the
+(checked 2026-10-09). "Found on" is the release each library was at when the
 bugs were found and filed; the links in the sections below point at those
 releases.
 
 | Library | Pinned | Found on |
 |---|---|---|
-| ash | 3.34.5 | 3.33.3 |
-| ash_postgres | 2.14.3 | 2.13.1 |
+| ash | 3.34.6 | 3.33.3 |
+| ash_postgres | 2.14.5 | 2.13.1 |
 | ash_sql | 0.8.1 | 0.7.3 |
 | ash_json_api | 1.7.1 | 1.7.1 |
 | ash_graphql | 1.12.0 | 1.11.0 |
@@ -136,8 +136,9 @@ suite against the releases named there.
 
 ### ash/filter-combinator-shape
 
-Status (2026-09-21): fixed in ash 3.33.6 by
-[ash#2951](https://github.com/ash-project/ash/pull/2951); issue closed. All 8
+Status (2026-09-21): fixed in ash 3.33.6 by commit
+[`2d992b4`](https://github.com/ash-project/ash/commit/2d992b4) (ash#2951, whose
+page is gone since its author's account was removed); issue closed. All 8
 bug tests pass on the pinned release.
 
 Trigger: `Ash.Query.filter_input(Post, %{"and" => "x"})`, `%{"or" => ""}`,
@@ -546,7 +547,7 @@ Status (2026-10-04): filed as
 our fix in [ash_postgres#877](https://github.com/ash-project/ash_postgres/pull/877).
 On 2026-10-04 the maintainer closed both without a code change, advising that
 the check be written with `~S()` or similar so it is handled literally. Still
-reproduces on ash_postgres 2.14.3; all four bug tests passed against the PR
+reproduces on ash_postgres 2.14.5; all four bug tests passed against the PR
 branch. Checked on 2.14.2: `~S(a ~ '^\d{4}$')` is the same string as the one in
 this test and still stores U+007F; doubling the backslash inside the sigil,
 `~S(b ~ '^\\d{4}$')`, stores the intended constraint, accepts `"1234"` and
