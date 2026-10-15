@@ -22,19 +22,19 @@ plain `Plug.Router` driven with `Plug.Test` (no server).
 ## Versions
 
 Every direct dependency is pinned to the newest exact release in `mix.exs`
-(checked 2026-10-09). "Found on" is the release each library was at when the
+(checked 2026-10-15). "Found on" is the release each library was at when the
 bugs were found and filed; the links in the sections below point at those
 releases.
 
 | Library | Pinned | Found on |
 |---|---|---|
-| ash | 3.34.6 | 3.33.3 |
+| ash | 3.36.1 | 3.33.3 |
 | ash_postgres | 2.14.5 | 2.13.1 |
-| ash_sql | 0.8.1 | 0.7.3 |
+| ash_sql | 0.8.2 | 0.7.3 |
 | ash_json_api | 1.7.1 | 1.7.1 |
 | ash_graphql | 1.12.0 | 1.11.0 |
 | ash_lua | 0.2.3 | 0.2.2 |
-| ash_ai | 1.1.1 | 1.0.3 |
+| ash_ai | 1.2.0 | 1.0.3 |
 | absinthe | 1.12.0 | 1.12.0 |
 | absinthe_plug | 1.5.10 | 1.5.10 |
 | ecto | 3.14.2 | 3.14.2 |
